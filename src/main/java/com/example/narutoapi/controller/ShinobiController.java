@@ -1,13 +1,20 @@
 package com.example.narutoapi.controller;
 
 import java.util.List;
+import java.util.Optional;
+
 import com.example.narutoapi.model.Shinobi;
+import com.example.narutoapi.model.ShinobiUpdateModel;
+import com.example.narutoapi.model.Village;
 import com.example.narutoapi.repository.ShinobiRepository;
+import com.example.narutoapi.repository.VillageRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,33 +23,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/shinobi")
 public class ShinobiController {
-    private final ShinobiRepository repository;
+    private final ShinobiRepository shinobiRepository;
+    private final VillageRepository villageRepository;
 
-    ShinobiController(ShinobiRepository repository) {
-        this.repository = repository;
+    ShinobiController(ShinobiRepository shinobiRepository, VillageRepository villageRepository) {
+        this.shinobiRepository = shinobiRepository;
+        this.villageRepository = villageRepository;
+
     }
 
     @GetMapping
     List<Shinobi> all(@RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName) {
         if (firstName != null) {
-            return repository.findAllByQuery(firstName);
+            return shinobiRepository.findAllByQuery(firstName);
         }
-        return repository.findAll();
+        return shinobiRepository.findAll();
     }
 
     @PostMapping
     Shinobi newShinobi(@RequestBody Shinobi newShinobi) {
-        return repository.insert(newShinobi);
+        return shinobiRepository.insert(newShinobi);
     }
 
     @GetMapping("/{id}")
     Shinobi one(@PathVariable String id) {
-        return repository.findById(id).orElseThrow(() -> new ShinobiNotFoundException(id));
+        return shinobiRepository.findById(id).orElseThrow(() -> new ShinobiNotFoundException(id));
+    }
+
+    @PutMapping("/{id}")
+    Shinobi update(@RequestBody Shinobi newShinobi, @PathVariable String id) {
+        return shinobiRepository.findById(id).map(shinobi -> {
+            if (newShinobi.getFirstName() != null) {
+                shinobi.setFirstName(newShinobi.getFirstName());
+            }
+            if (newShinobi.getLastName() != null) {
+                shinobi.setLastName(newShinobi.getLastName());
+            }
+            if (newShinobi.getTeam() != null) {
+                shinobi.setTeam(newShinobi.getTeam());
+            }
+            if (newShinobi.getVillage() != null) {
+                shinobi.setVillage(newShinobi.getVillage());
+            }
+            return shinobiRepository.save(shinobi);
+        }).orElseThrow(() -> new ShinobiNotFoundException(id));
     }
 
     @DeleteMapping("/{id}")
     void deleteShinobi(@PathVariable String id) {
-        repository.deleteById(id);
+        shinobiRepository.deleteById(id);
     }
 }

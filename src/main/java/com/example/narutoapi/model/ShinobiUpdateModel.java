@@ -1,23 +1,27 @@
 package com.example.narutoapi.model;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("shinobi")
-public class Shinobi {
+import java.util.Optional;
+
+import com.example.narutoapi.repository.VillageRepository;
+
+import org.springframework.data.annotation.Id;
+
+public class ShinobiUpdateModel {
     @Id
     private String id;
     private String firstName;
     private String lastName;
     private String team;
-    private Village village;
+    private String villageId;
 
 
-    public Shinobi(String id, String firstName, String lastName) {
+    public ShinobiUpdateModel(String id, String firstName, String lastName, String team, String villageId) {
         super();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
- 
+        this.team = team;
+        this.villageId = villageId;
     }
 
     public String getId() {
@@ -48,12 +52,11 @@ public class Shinobi {
         this.team = team;
     }
 
-    public Village getVillage() {
-        return this.village;
+    public String getVillageId() {
+        return this.villageId;
     }
 
-    public void setVillage(Village village) {
-        this.village = village;
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
     }
-
 }
