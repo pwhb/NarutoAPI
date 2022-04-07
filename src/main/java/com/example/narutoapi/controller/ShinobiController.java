@@ -1,13 +1,8 @@
 package com.example.narutoapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import com.example.narutoapi.model.Shinobi;
-import com.example.narutoapi.model.ShinobiUpdateModel;
-import com.example.narutoapi.model.Village;
 import com.example.narutoapi.repository.ShinobiRepository;
-import com.example.narutoapi.repository.VillageRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/shinobi")
 public class ShinobiController {
     private final ShinobiRepository shinobiRepository;
-    private final VillageRepository villageRepository;
 
-    ShinobiController(ShinobiRepository shinobiRepository, VillageRepository villageRepository) {
+    ShinobiController(ShinobiRepository shinobiRepository) {
         this.shinobiRepository = shinobiRepository;
-        this.villageRepository = villageRepository;
 
     }
 

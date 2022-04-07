@@ -34,7 +34,7 @@ public class VillageController {
 
     @GetMapping("/{id}")
     Village one(@PathVariable String id) {
-        return repository.findById(id).orElseThrow(() -> new ShinobiNotFoundException(id));
+        return repository.findById(id).orElseThrow(() -> new VillageNotFoundException(id));
     }
 
     @DeleteMapping("/{id}")
